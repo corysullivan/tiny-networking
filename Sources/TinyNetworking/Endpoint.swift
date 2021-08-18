@@ -284,7 +284,7 @@ public extension URLSession {
 #endif
 
 @available(iOS 15, macOS 12.0, watchOS 8, tvOS 15, *)
-extension URLSession {
+public extension URLSession {
     func load<A>(_ e: Endpoint<A>) async throws -> A {
         let request = e.request
         do {
