@@ -285,7 +285,7 @@ public extension URLSession {
 
 @available(iOS 15, macOS 12.0, watchOS 8, tvOS 15, *)
 extension URLSession {
-    func loadRequest<A>(_ e: Endpoint<A>) async throws -> A {
+    func load<A>(_ e: Endpoint<A>) async throws -> A {
         let request = e.request
         do {
             let (data, resp) = try await data(for: request)
