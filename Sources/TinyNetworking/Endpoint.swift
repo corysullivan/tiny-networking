@@ -301,6 +301,14 @@ public extension URLSession {
             throw HTTPError.unknown
         } catch let HTTPError.serverSide(error) {
             throw HTTPError.serverSide(error)
+        } catch DecodingError.dataCorrupted(let context) {
+            throw HTTPError.decoding(context.debugDescription)
+        } catch DecodingError.keyNotFound(let key, let context) {
+            throw HTTPError.decoding("The Key `\(key.stringValue)` was not found, \(context.debugDescription)")
+        } catch DecodingError.typeMismatch(let type, let context) {
+            throw HTTPError.decoding("\(type) was expected, \(context.debugDescription)")
+        } catch DecodingError.valueNotFound(let type, let context) {
+            throw HTTPError.decoding("no value was found for \(type), \(context.debugDescription)")
         } catch {
             throw HTTPError.transport(error)
         }
@@ -311,4 +319,20 @@ public enum HTTPError: Error {
     case unknown
     case transport(Error)
     case serverSide(WrongStatusCodeError)
+    case decoding(String)
+}
+
+extension HTTPError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .unknown:
+            return "unknown error"
+        case .transport( let error):
+            return error.localizedDescription
+        case .serverSide(let wrongStatus):
+            return wrongStatus.localizedDescription
+        case .decoding(let message):
+            return "Decoding Error: \(message)"
+        }
+    }
 }
