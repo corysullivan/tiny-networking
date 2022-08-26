@@ -210,7 +210,7 @@ public struct UnknownError: Error {
 }
 
 /// Signals that a response's status code was wrong.
-public struct WrongStatusCodeError: Error {
+public struct WrongStatusCodeError: Error, Equatable {
     public let statusCode: Int
     public let response: HTTPURLResponse?
     public let responseBody: Data?
